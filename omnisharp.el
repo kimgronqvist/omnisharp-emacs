@@ -317,11 +317,11 @@ CALLBACK is the status callback passed by Flycheck."
          (funcall callback 'finished (delq nil errors)))))))
 
 (flycheck-define-generic-checker 'csharp-omnisharp-codecheck
-                                 "A csharp source syntax checker using the OmniSharp server process
+  "A csharp source syntax checker using the OmniSharp server process
    running in the background"
-                                 :start #'omnisharp--flycheck-start
-                                 :modes '(csharp-mode)
-                                 :predicate (lambda () (and omnisharp-mode omnisharp--server-info)))
+  :start #'omnisharp--flycheck-start
+  :modes '(csharp-mode)
+  :predicate (lambda () (and omnisharp-mode (omnisharp--is-server-active))))
 
 (defun omnisharp--flycheck-error-parser (response checker buffer)
   "Takes a QuickFixResponse result. Returns flycheck errors created based on the
@@ -441,7 +441,7 @@ cursor at that location"
   "Returns a doc string appropriate for the current context.
    If point is on an empty char, it looks for data on any previous completions.
    Otherwise, returns nil."
-  (unless (equal nil omnisharp--server-info)
+  (when (omnisharp--is-server-active)
     (condition-case nil
         (if (not (looking-at-p " "))
             (progn

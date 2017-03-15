@@ -12,6 +12,10 @@
     (:response-handlers . nil)
     (:started? . nil)))
 
+(defun omnisharp--is-server-active ()
+  (or (equal omnisharp-use-http t)
+      (not (equal omnisharp--server-info nil))))
+
 (defun omnisharp--clear-response-handlers ()
   "For development time cleaning up impossible states of response
 handlers in the current omnisharp--server-info."
